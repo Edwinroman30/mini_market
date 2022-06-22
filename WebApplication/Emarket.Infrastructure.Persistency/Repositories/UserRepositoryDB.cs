@@ -17,5 +17,10 @@ namespace Emarket.Infrastructure.Persistency.Repositories
         {
             _dbContext = applicationContext;
         }
+
+        public Task GetAndUserNameValidation(string userName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
