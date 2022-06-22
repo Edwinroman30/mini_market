@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Emarket.Core.Application.Interfaces.Services
 {
-    public interface IGenericServices<SaveViewModel, ViewModel>
+    public interface IGenericService<SaveViewModel, ViewModel>
                                         where SaveViewModel : class
                                         where ViewModel : class
     {
-        Task Add(SaveViewModel vm);
+        Task AddAsync(SaveViewModel vm);
 
-        Task Update(SaveViewModel vm);
+        Task UpdateAsync(SaveViewModel vm);
 
-        Task Delete(int id);
+        Task DeleteAsync(int id);
 
-        Task<SaveViewModel> GetByIdSaveViewModel(int id);
+        Task<SaveViewModel> GetByIdSaveViewModelAsync(int id);
 
-        Task<List<ViewModel>> GetAllViewModel();
+        Task<List<ViewModel>> GetAllViewModelAsync();
     }
 
 }
