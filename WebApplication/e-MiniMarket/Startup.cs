@@ -1,3 +1,5 @@
+using Emarket.Core.Application;
+using Emarket.Infrastructure.Persistency;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +26,8 @@ namespace e_MiniMarket
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddInfrastructureLayerDependecies(Configuration);
+            services.AddApplicationLayerDependecies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

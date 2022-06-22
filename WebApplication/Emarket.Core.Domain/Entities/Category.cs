@@ -13,6 +13,8 @@ namespace Emarket.Core.Domain.Entities
          public string CategoryName { get; set; }
          public string Description { get; set; }
 
+            //Keep alert may you need anothe navigation property with user.
+
          public ICollection<Advertisement> Advertisements { get; set; }
      }
 
