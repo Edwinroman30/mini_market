@@ -49,6 +49,7 @@ namespace Emarket.Infrastructure.Persistency.Repositories
         {
             return await _dbContext
                  .Set<Entity>()
+                 .AsNoTracking()
                  .ToListAsync();
         }
 
