@@ -9,7 +9,9 @@ namespace Emarket.Core.Application.Interfaces.Repositories
 {
     public interface IUserRepository : IGenericRepositoryDB<User>
     {
-        
+
+        Task GetAndUserNameValidation(string userName);
+
     }
 
 }
