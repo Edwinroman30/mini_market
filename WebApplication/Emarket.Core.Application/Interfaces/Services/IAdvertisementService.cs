@@ -1,4 +1,4 @@
-﻿using Emarket.Core.Application.ViewModels;
+﻿using Emarket.Core.Application.ViewModels.Ads;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace Emarket.Core.Application.Interfaces.Services
 {
     public interface IAdvertisementService : IGenericService<AdvertisementSaveViewModel, AdvertisementViewModel >
     {
-        Task<AdvertisementViewModel> GetAdvertisementWithFilter(AdvertisementFilterViewModel filterViewModel);
+        Task<List<AdvertisementViewModel>> GetAdvertisementWithFilter(AdvertisementFilterViewModel filterViewModel);
 
     }
 }

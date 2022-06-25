@@ -10,7 +10,7 @@ namespace Emarket.Core.Application.Interfaces.Services
                                         where SaveViewModel : class
                                         where ViewModel : class
     {
-        Task AddAsync(SaveViewModel vm);
+        Task<SaveViewModel> AddAsync(SaveViewModel vm);
 
         Task UpdateAsync(SaveViewModel vm);
 

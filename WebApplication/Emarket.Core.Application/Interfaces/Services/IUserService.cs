@@ -9,7 +9,8 @@ namespace Emarket.Core.Application.Interfaces.Services
 {
     public interface IUserService : IGenericService<UserSaveViewModel, UserViewModel>
     {
-        Task<UserViewModel> Login(UserLoginViewModel loginViewModel);
+        Task<UserViewModel> LoginAsync(UserLoginViewModel loginViewModel);
+        Task<UserViewModel> GetAndUserNameValidationAsync(UserSaveViewModel userSaveViewModel); //En los controllers
 
     }
 }

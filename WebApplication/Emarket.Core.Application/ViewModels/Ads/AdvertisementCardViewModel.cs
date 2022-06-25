@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emarket.Core.Application.ViewModels
+namespace Emarket.Core.Application.ViewModels.Ads
 {
     public class AdvertisementCardViewModel
     {

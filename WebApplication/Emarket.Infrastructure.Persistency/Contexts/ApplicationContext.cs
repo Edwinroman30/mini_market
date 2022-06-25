@@ -100,6 +100,10 @@ namespace Emarket.Infrastructure.Persistency.Contexts
             .Property(user => user.Password)
             .IsRequired();
 
+            modelBuilder.Entity<Advertisement>()
+                .Property(ad => ad.Price)
+                .HasColumnType(typeName: "decimal")
+                .HasPrecision(6,2);
 
         }
 

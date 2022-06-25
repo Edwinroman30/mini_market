@@ -1,4 +1,5 @@
-﻿using Emarket.Core.Domain.Entities;
+﻿using Emarket.Core.Application.ViewModels.User;
+using Emarket.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Emarket.Core.Application.Interfaces.Repositories
     public interface IUserRepository : IGenericRepositoryDB<User>
     {
 
-        Task GetAndUserNameValidation(string userName);
+        Task <User> LoginUserAsync(UserLoginViewModel userLoginView);
+        Task<User> GetAndUserNameValidationAsync(User givenUser); //En los controllers
 
     }
 

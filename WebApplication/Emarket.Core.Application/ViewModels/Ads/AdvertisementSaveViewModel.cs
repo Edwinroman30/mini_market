@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Emarket.Core.Application.ViewModels
+namespace Emarket.Core.Application.ViewModels.Ads
 {
     public class AdvertisementSaveViewModel
     {
@@ -32,6 +32,12 @@ namespace Emarket.Core.Application.ViewModels
         [Required(ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
+        
+        // URL
+        public string FirstImg { get; set; }
+        public string SecondImg { get; set; }
+        public string ThirdImg { get; set; }
+        public string FourthImg { get; set; }
 
 
     }

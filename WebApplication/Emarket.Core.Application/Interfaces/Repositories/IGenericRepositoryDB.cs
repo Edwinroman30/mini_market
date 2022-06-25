@@ -10,16 +10,11 @@ namespace Emarket.Core.Application.Interfaces
 
     public interface IGenericRepositoryDB<Entity>  where Entity : class
     {
-        Task<bool> AddAsync(Entity entity);
-
+        Task<Entity> AddAsync(Entity entity);
         Task UpdateAsync(Entity entity);
-
         Task DeleteAsync(Entity entity);
-
         Task<List<Entity>> GetAllAsync();
-
         Task<Entity> GetByIdAsync(int id);
-
         Task<List<Entity>> GetAllWithPropertyAsync(List<string> navigationsProperties);
 
     }

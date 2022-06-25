@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32428.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-MiniMarket", "e-MiniMarket\e-MiniMarket.csproj", "{832A2CB5-8D22-486B-91CD-279A11B4B4A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "e-MiniMarket", "e-MiniMarket\e-MiniMarket.csproj", "{832A2CB5-8D22-486B-91CD-279A11B4B4A6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{37E4C3AE-6811-497B-92F0-B8F52154A217}"
 EndProject
@@ -15,11 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{F6961C9A-5D44-48D2-BCD6-E2C03F54E3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emarket.Core.Domain", "Emarket.Core.Domain\Emarket.Core.Domain.csproj", "{0B732115-9C7A-4A2D-913A-470C20F4F06C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emarket.Core.Domain", "Emarket.Core.Domain\Emarket.Core.Domain.csproj", "{0B732115-9C7A-4A2D-913A-470C20F4F06C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emarket.Core.Application", "Emarket.Core.Application\Emarket.Core.Application.csproj", "{960970B5-2F3F-47C9-B6A5-292A42350C43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emarket.Core.Application", "Emarket.Core.Application\Emarket.Core.Application.csproj", "{960970B5-2F3F-47C9-B6A5-292A42350C43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emarket.Infrastructure.Persistency", "Emarket.Infrastructure.Persistency\Emarket.Infrastructure.Persistency.csproj", "{BDB0C14D-38A0-4E10-90A2-9431C81903C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emarket.Infrastructure.Persistency", "Emarket.Infrastructure.Persistency\Emarket.Infrastructure.Persistency.csproj", "{BDB0C14D-38A0-4E10-90A2-9431C81903C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

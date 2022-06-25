@@ -1,0 +1,74 @@
+﻿@using Emarket.Core.Application.ViewModels.User;
+@model UserSaveViewModel
+
+@{
+    ViewData["Title"] = "Sign Up";
+}
+<link href="~/css/loginStyles.css" rel="stylesheet" />
+
+<div class="container rounded second_color">
+
+    <main class="w-70 mt-md-5 container d-flex justify-content-center align-items-center p-5">
+
+
+        <form method="post" asp-controller="Authentication" asp-action="Signup">
+
+            <div class="form-group mb-4 text-center ">
+                <a class="h1" asp-controller="Authentication" asp-action="Signup"> 🥦 </a>
+            </div>
+
+            <h1 class="h3 mb-3 fw-normal text-success text-center">Welcome, join us and Sign Up with us.</h1>
+
+            <div class="form-group">
+                <input type="hidden" class="form-control" id="floatingInput" asp-for="UserId">
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Name">Name:</label>
+                <input type="text" class="form-control" asp-for="Name">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UserName">User name:</label>
+                <input type="text" class="form-control" asp-for="UserName">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Password">Password:</label>
+                <input type="password" class="form-control" placeholder="Password" asp-for="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="ConfirmPassword">Password Confirmation:</label>
+                <input type="password" class="form-control" placeholder="Password" asp-for="ConfirmPassword">
+                <span class="text-danger" asp-validation-for="ConfirmPassword"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Email">Email address:</label>
+                <input type="email" class="form-control" placeholder="name@example.com" asp-for="Email">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Phone">Phone:</label>
+                <input type="tel" class="form-control" asp-for="Phone">
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+
+
+            <input class="w-100 btn btn-lg btn-primary text-center" type="submit" value="Sign up" />
+
+            <a class="w-100 btn btn-success text-center mt-3" asp-controller="Authentication" asp-action="Signin"> Have you already got an account? Sign In, here!</a>
+
+        </form>
+
+
+    </main>
+
+</div>

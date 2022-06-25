@@ -18,18 +18,18 @@ namespace Emarket.Infrastructure.Persistency.Repositories
             _dbContext = dbContext;
         }
 
-        public virtual async Task<bool> AddAsync(Entity entity)
+        public virtual async Task<Entity> AddAsync(Entity entity)
         {
             try
             {
                 await _dbContext.Set<Entity>().AddAsync(entity);
                 await _dbContext.SaveChangesAsync();
 
-                return true;
+                return entity;
             }
             catch
             {
-                return false;
+                return null;
             }
         }
 
@@ -39,13 +39,13 @@ namespace Emarket.Infrastructure.Persistency.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Entity entity)
+        public virtual async Task DeleteAsync(Entity entity)
         {
             _dbContext.Set<Entity>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Entity>> GetAllAsync()
+        public virtual async Task<List<Entity>> GetAllAsync()
         {
             return await _dbContext
                  .Set<Entity>()
@@ -54,7 +54,8 @@ namespace Emarket.Infrastructure.Persistency.Repositories
         }
 
         //WIth n. property Include or SQL Join
-        public async Task<List<Entity>> GetAllWithPropertyAsync(List<string> navigationsProperties)
+        //Hacer uno con un ThenInclude()
+        public virtual async Task<List<Entity>> GetAllWithPropertyAsync(List<string> navigationsProperties)
         {
             var query = _dbContext.Set<Entity>().AsQueryable();
 
@@ -63,11 +64,11 @@ namespace Emarket.Infrastructure.Persistency.Repositories
                 query = query.Include(property);
             }
 
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
 
-        public async Task<Entity> GetByIdAsync(int id)
+        public virtual async Task<Entity> GetByIdAsync(int id)
         {
             return await _dbContext
                  .Set<Entity>()

@@ -1,0 +1,47 @@
+﻿@model Emarket.Core.Application.ViewModels.User.UserLoginViewModel
+@{
+    ViewData["Title"] = "Login - Signing In";
+}
+<link href="~/css/loginStyles.css" rel="stylesheet" />
+
+<div class="container-fluid mt-md-5">
+
+    <div class="row" style="height:80vh;">
+
+        <div class="col-6  d-flex justify-content-center align-items-center p-5">
+
+            <form method="post" asp-controller="Authentication" asp-action="Signin">
+
+                <div class="form-group mb-4 text-center ">
+                    <a class="h1" asp-controller="Authentication" asp-action="Signin"> 🥦 </a>
+                </div>
+
+                <h1 class="h3 mb-3 fw-normal text-white text-center">Please Sign In</h1>
+
+                @Html.ValidationSummary(false, "", new { @class = "text-white" })
+
+                <div class="form-group text-white">
+                    <label asp-for="UserName">User Name or Email</label>
+                    <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" asp-for="UserName">
+                </div>
+
+                <div class="form-group text-white">
+                    <label asp-for="Password">Password</label>
+                    <input type="password" class="form-control" asp-for="Password" placeholder="Password">
+                </div>
+
+                <input class="w-100 btn btn-lg btn-primary text-center" type="submit" value="Sign In" />
+
+                <a class="w-100 btn btn-success text-center mt-3" asp-controller="Authentication" asp-action="Signup">Sign Up</a>
+
+            </form>
+
+        </div>
+
+        <div class="second_color w-100 col-6 h-auto">
+
+        </div>
+
+    </div>
+
+</div>

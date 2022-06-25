@@ -37,7 +37,7 @@ namespace Emarket.Infrastructure.Persistency
             #endregion
 
 
-            #region ProductServices Registration
+            #region DI Registration
               services.AddTransient(typeof(IGenericRepositoryDB<>), typeof(GenericRepositoryDB<>));
               services.AddTransient<IAdvertisementRepository, AdvertisementRepositoryDB>();
               services.AddTransient<ICategoryRepository, CategoryRepositoryDB>();
