@@ -25,10 +25,12 @@ namespace e_MiniMarket
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSession();
             services.AddControllersWithViews();
             services.AddInfrastructureLayerDependecies(Configuration);
             services.AddApplicationLayerDependecies();
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -43,6 +45,10 @@ namespace e_MiniMarket
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            //Setting Up the sessions + Configuring the session middleware.
+            app.UseSession();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -57,5 +63,7 @@ namespace e_MiniMarket
                     pattern: "{controller=Authentication}/{action=Index}/{id?}");
             });
         }
+
     }
+
 }
