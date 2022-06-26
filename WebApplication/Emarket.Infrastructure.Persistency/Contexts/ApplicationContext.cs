@@ -1,5 +1,7 @@
-﻿using Emarket.Core.Domain.Commons;
+﻿using Emarket.Core.Application.ViewModels.User;
+using Emarket.Core.Domain.Commons;
 using Emarket.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -8,15 +10,24 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Emarket.Core.Application.Helpers;
 
 namespace Emarket.Infrastructure.Persistency.Contexts
 {
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions dbContextOptions)
-        :base(dbContextOptions) {  }
 
-        public DbSet<User> Users { get; set; }
+        private readonly IHttpContextAccessor _httpContext;
+        private UserViewModel _userView;
+
+        public ApplicationContext(DbContextOptions dbContextOptions, IHttpContextAccessor httpContext)
+        :base(dbContextOptions) 
+        {
+           _httpContext = httpContext;
+            _userView = _httpContext.HttpContext.Session.Get<UserViewModel>("user_session");
+        }
+
+    public DbSet<User> Users { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Category> Categories { get; set; }
 
@@ -29,12 +40,12 @@ namespace Emarket.Infrastructure.Persistency.Contexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = "USER SESSION";
+                        entry.Entity.CreatedBy = _userView.Email;
                         entry.Entity.CreatedAt = DateTime.Now;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = "DefaulUserSystem";
+                        entry.Entity.LastModifiedBy = _userView.Email;
                         entry.Entity.LastModifiedAt = DateTime.Now;
                         break;
                 }

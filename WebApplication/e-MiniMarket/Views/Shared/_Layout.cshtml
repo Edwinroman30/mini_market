@@ -1,4 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@*Un tip que puede ser de ayuda para aprovechar las sessiones en las vistas y tomar acciones
+tipo: ocultar elementos, denegar optiones y mas etc...
+@using Microsoft.AspNetCore.Http; //Access to the sessions.
+@using Myapp.Core.Application.Helpers; //To get access to extension methods that I did to the derived IService object.
+@using Myapp.Core.Application.ViewModels.User; //Because the extensions method uses generic to be able to work with differents object and entities, we use the UserViewModel define to get access to that key with the data we serialized.
+@inject IHtttpContextAccesor httpContext; //Cause the model does not suportt constructors, DI, etc... to work with DI we use these to make referece to the dependency injected and be able to use here.
+//Finally
+
+@{
+    UserViewModel Use = httpContext.HttpContext.Session.Get<UserViewModel>("THE KEY THA WE PROVIDED.");
+}
+And that is all to work with session in the viewmodel. Now just start with the validations.
+*@
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,18 +24,20 @@
 </head>
 <body>
 
-    <div class="primary_color text-white text-center fst-italic">
+    <div class="primary_color text-white text-center fst-italic p-1">
         <small> Our team is working to bring your the best experience, comming soon Market Movil APP 📱 </small>
     </div>
 
     <header class="second_color">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
+            <div class="container flex-sm-column">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">🥦 Los Mina Market</a>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
@@ -48,7 +64,7 @@
     </header>
 
     <div class="">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-sm-3">
             @RenderBody()
         </main>
     </div>

@@ -1,7 +1,9 @@
+using e_MiniMarket.Middleware;
 using Emarket.Core.Application;
 using Emarket.Infrastructure.Persistency;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +28,11 @@ namespace e_MiniMarket
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSession();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ValidateUserSession, ValidateUserSession>();
+
             services.AddControllersWithViews();
+
             services.AddInfrastructureLayerDependecies(Configuration);
             services.AddApplicationLayerDependecies();
         }

@@ -5,26 +5,38 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Emarket.Core.Application.Helpers;
+using e_MiniMarket.Middleware;
 
 namespace e_MiniMarket.Controllers
 {
     public class AuthenticationController : Controller
     {
         private readonly IUserService _userService;
-        
-        public AuthenticationController(IUserService userService)
+        private readonly ValidateUserSession _validateUserSession;
+
+        public AuthenticationController(IUserService userService, ValidateUserSession userSession)
         {
             this._userService = userService;
+            this._validateUserSession = userSession;
+
         }
 
         #region Login
         public IActionResult Index()
         {
+            if(_validateUserSession.HasUserLogged())
+                    return RedirectToRoute(new { controller = "Home", action = "Index" });
+           
             return View("Signin");
+
         }
 
         public IActionResult Signin()
         {
+            if (_validateUserSession.HasUserLogged())
+                   return RedirectToRoute(new { controller = "Home", action = "Index" });
+        
             return View("Signin");
         }
 
@@ -37,7 +49,12 @@ namespace e_MiniMarket.Controllers
             }
            
 
-            var user = await _userService.LoginAsync(userLoginView);
+            UserViewModel user = await _userService.LoginAsync(userLoginView);
+            user.Password = "";
+
+            //Stablishing the session.
+            HttpContext.Session.Set<UserViewModel>("user_session", user);
+
 
             if (user != null)
             {
@@ -46,16 +63,19 @@ namespace e_MiniMarket.Controllers
             }
             else
             {
-                ModelState.AddModelError("userValidation", "Invalid Data.");//change
+                ModelState.AddModelError("loginValidation", "Invalid Data.");
                 return View("Signin", userLoginView);
             }
 
         }
         #endregion
 
-
+        #region SignUP
         public IActionResult Signup()
         {
+            if (_validateUserSession.HasUserLogged())
+                    return RedirectToRoute(new { controller = "Home", action = "Index" });
+
             return View("Signup");
         }
 
@@ -77,6 +97,14 @@ namespace e_MiniMarket.Controllers
 
             return View("Signup");
 
+        }
+        #endregion
+
+
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Remove("user_session");
+            return RedirectToRoute(new { controller = "Authentication", action = "Index" });
         }
 
 

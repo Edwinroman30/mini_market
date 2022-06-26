@@ -2,22 +2,27 @@
 using Emarket.Core.Application.Interfaces.Services;
 using Emarket.Core.Application.ViewModels.Ads;
 using Emarket.Core.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Emarket.Core.Application.Helpers;
+using Emarket.Core.Application.ViewModels.User;
 
 namespace Emarket.Core.Application.Services
 {
     public class AdvertisementService : IAdvertisementService
     {
         private readonly IAdvertisementRepository _advertisementService;
+        private readonly IHttpContextAccessor _httpContext;
+        private UserViewModel _userViewModel; 
 
         public AdvertisementService(IAdvertisementRepository advertisementRepository)
         {
             this._advertisementService = advertisementRepository;
-            //USE A USERVIEWMODEL TODO
+            _userViewModel = _httpContext.HttpContext.Session.Get<UserViewModel>("user_session");
         }
 
         public async Task<AdvertisementSaveViewModel> AddAsync(AdvertisementSaveViewModel vm)
@@ -29,8 +34,7 @@ namespace Emarket.Core.Application.Services
                 AdvertisementId = vm.AdvertisementId,
                 ProductName = vm.ProductName,
                 CategoryId = vm.CategoryId,
-                UserId = vm.UserId,  //MUST COMING FROM SESSION
-                /// TODO
+                UserId = _userViewModel.UserId,  //MUST COMING FROM SESSION
                 FirstImage = vm.FirstImg,
                 SecondImage = vm.SecondImg,
                 ThirdImage = vm.ThirdImg,
@@ -73,7 +77,9 @@ namespace Emarket.Core.Application.Services
             List<Advertisement> result = await _advertisementService.GetAllWithPropertyAsync( new List<string> { "Category", "User" } );
 
             List<AdvertisementViewModel> advertisementViewModels = 
-                result.Select( advertisements => new AdvertisementViewModel()
+                result
+                .Where(ads => ads.UserId != _userViewModel.UserId)
+                .Select( advertisements => new AdvertisementViewModel()
                 {
                     AdvertisementId = advertisements.AdvertisementId,
                     ProductName = advertisements.ProductName,
@@ -85,7 +91,6 @@ namespace Emarket.Core.Application.Services
                     FourthImage = advertisements.FourthImage,
                     Price = advertisements.Price
                 })
-                .Where(ads => ads.UserId != 2 ) // TODO: PUT the user session id
                 .ToList();
 
 
@@ -119,7 +124,7 @@ namespace Emarket.Core.Application.Services
                     FourthImage = advertisements.FourthImage,
                     Price = advertisements.Price
                 })
-                //.Where(ads => ads.UserId != 2) // TODO: PUT the user session id
+                //.Where(ads => ads.UserId != _userViewModel.UserId) // TODO: PUT the user session id
                 .ToList();
 
             return advertisementViewModels;
