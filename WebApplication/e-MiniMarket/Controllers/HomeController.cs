@@ -1,5 +1,7 @@
 ﻿using e_MiniMarket.Middleware;
 using e_MiniMarket.Models;
+using Emarket.Core.Application.Interfaces.Services;
+using Emarket.Core.Application.ViewModels.Ads;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,22 +14,28 @@ namespace e_MiniMarket.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ValidateUserSession _validateUserSession;
+        private readonly IAdvertisementService _advertisementService;
+        private readonly ICategoryService _categoryService;
 
-        public HomeController(ILogger<HomeController> logger, ValidateUserSession validateUser)
+        public HomeController( ValidateUserSession validateUser, IAdvertisementService advertisement, ICategoryService categoryService)
         {
-            _logger = logger;
             _validateUserSession = validateUser;
-
+            _advertisementService = advertisement;
+            _categoryService = categoryService;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(AdvertisementFilterViewModel filterViewModel)
         {
+            
+            List<AdvertisementViewModel> advertisements = await _advertisementService.GetAdvertisementWithFilter(filterViewModel);
+            ViewBag.Categories = await _categoryService.GetAllViewModelAsync();
+
             if(!_validateUserSession.HasUserLogged())
                 return RedirectToRoute(new { controller = "Authentication", action = "Index" });
 
-            return View();
+            return View(model : advertisements);
         }
 
       
