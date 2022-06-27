@@ -24,10 +24,10 @@ namespace Emarket.Infrastructure.Persistency.Contexts
         :base(dbContextOptions) 
         {
            _httpContext = httpContext;
-            _userView = _httpContext.HttpContext.Session.Get<UserViewModel>("user_session");
+           _userView = _httpContext.HttpContext.Session.Get<UserViewModel>("user_session");
         }
 
-    public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Category> Categories { get; set; }
 
@@ -40,7 +40,7 @@ namespace Emarket.Infrastructure.Persistency.Contexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _userView.Email;
+                        entry.Entity.CreatedBy = _userView == null? "System.Default": _userView.Email;
                         entry.Entity.CreatedAt = DateTime.Now;
                         break;
 
@@ -52,7 +52,7 @@ namespace Emarket.Infrastructure.Persistency.Contexts
 
             }
 
-            return base.SaveChangesAsync(cancellationToken); //Still has it parent behavior and order added by the child.
+            return base.SaveChangesAsync(cancellationToken); //Still it has its parent behavior and order added by the child. //SOLID
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
