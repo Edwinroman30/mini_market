@@ -15,13 +15,15 @@ namespace Emarket.Core.Application.Services
 {
     public class AdvertisementService : IAdvertisementService
     {
-        private readonly IAdvertisementRepository _advertisementService;
+        private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IHttpContextAccessor _httpContext;
         private UserViewModel _userViewModel; 
 
-        public AdvertisementService(IAdvertisementRepository advertisementRepository)
+        public AdvertisementService(IAdvertisementRepository advertisementRepository, IHttpContextAccessor accessor)
         {
-            this._advertisementService = advertisementRepository;
+            this._advertisementRepository = advertisementRepository;
+            this._httpContext = accessor;
+
             _userViewModel = _httpContext.HttpContext.Session.Get<UserViewModel>("user_session");
         }
 
@@ -39,10 +41,11 @@ namespace Emarket.Core.Application.Services
                 SecondImage = vm.SecondImg,
                 ThirdImage = vm.ThirdImg,
                 FourthImage = vm.FourthImg,
-                Price = vm.Price
+                Price = vm.Price,
+                Description = vm.Description
             };
 
-            Advertisement advertisementReturned = await _advertisementService.AddAsync(advertisement);
+            Advertisement advertisementReturned = await _advertisementRepository.AddAsync(advertisement);
 
             //From Model to SaveViewModel
 
@@ -56,7 +59,8 @@ namespace Emarket.Core.Application.Services
                 SecondImg = advertisementReturned.SecondImage,
                 ThirdImg = advertisementReturned.ThirdImage,
                 FourthImg = advertisementReturned.FourthImage,
-                Price = advertisementReturned.Price
+                Price = advertisementReturned.Price,
+                Description = advertisementReturned.Description
             };
 
 
@@ -64,9 +68,9 @@ namespace Emarket.Core.Application.Services
 
         public async Task DeleteAsync(int id)
         {
-            Advertisement advertisement = await _advertisementService.GetByIdAsync(id);
+            Advertisement advertisement = await _advertisementRepository.GetByIdAsync(id);
 
-            await _advertisementService.DeleteAsync(advertisement);
+            await _advertisementRepository.DeleteAsync(advertisement);
 
         }
 
@@ -74,7 +78,7 @@ namespace Emarket.Core.Application.Services
         public async Task<List<AdvertisementViewModel>> GetAdvertisementWithFilter(AdvertisementFilterViewModel filterViewModel)
         {
 
-            List<Advertisement> result = await _advertisementService.GetAllWithPropertyAsync( new List<string> { "Category", "User" } );
+            List<Advertisement> result = await _advertisementRepository.GetAllWithPropertyAsync( new List<string> { "Category", "User" } );
 
             List<AdvertisementViewModel> advertisementViewModels = 
                 result
@@ -89,7 +93,9 @@ namespace Emarket.Core.Application.Services
                     SecondImage = advertisements.SecondImage,
                     ThirdImage = advertisements.ThirdImage,
                     FourthImage = advertisements.FourthImage,
-                    Price = advertisements.Price
+                    Price = advertisements.Price,
+                    CategoryName = advertisements.Category.CategoryName,
+                    Description = advertisements.Description
                 })
                 .ToList();
 
@@ -101,7 +107,7 @@ namespace Emarket.Core.Application.Services
 
             if (!string.IsNullOrEmpty(filterViewModel.ProductName) && filterViewModel != null)
             {
-                advertisementViewModels = advertisementViewModels.Where(ads => ads.ProductName == filterViewModel.ProductName).ToList();
+                advertisementViewModels = advertisementViewModels.Where(ads => ads.ProductName == filterViewModel.ProductName || ads.ProductName.Contains(filterViewModel.ProductName) ).ToList();
             }
             
             return advertisementViewModels;
@@ -109,7 +115,7 @@ namespace Emarket.Core.Application.Services
 
         public async Task<List<AdvertisementViewModel>> GetAllViewModelAsync()
         {
-            List<Advertisement> result = await _advertisementService.GetAllWithPropertyAsync(new List<string> { "Category", "User" });
+            List<Advertisement> result = await _advertisementRepository.GetAllWithPropertyAsync(new List<string> { "Category", "User" });
 
             List<AdvertisementViewModel> advertisementViewModels =
                 result.Select(advertisements => new AdvertisementViewModel()
@@ -122,17 +128,48 @@ namespace Emarket.Core.Application.Services
                     SecondImage = advertisements.SecondImage,
                     ThirdImage = advertisements.ThirdImage,
                     FourthImage = advertisements.FourthImage,
-                    Price = advertisements.Price
+                    Price = advertisements.Price,
+                    CategoryName = advertisements.Category.CategoryName,
+                    Description = advertisements.Description
                 })
-                //.Where(ads => ads.UserId != _userViewModel.UserId) // TODO: PUT the user session id
+                .Where(ads => ads.UserId == _userViewModel.UserId) // TODO: PUT the user session id
                 .ToList();
 
             return advertisementViewModels;
         }
 
+        public async Task<AdvertisementCardViewModel> GetAdvertisementWithFullProperties(int id)
+        {
+            List<Advertisement> result = await _advertisementRepository.GetAllWithPropertyAsync(new List<string> { "Category", "User" });
+
+            AdvertisementCardViewModel advertisementFullProperties =
+                result
+                .Select(advertisement => new AdvertisementCardViewModel()
+                {
+                    AdvertisementId = advertisement.AdvertisementId,
+                    ProductName = advertisement.ProductName,
+                    CategoryId = advertisement.CategoryId,
+                    UserId = advertisement.UserId,
+                    FirstImage = advertisement.FirstImage,
+                    SecondImage = advertisement.SecondImage,
+                    ThirdImage = advertisement.ThirdImage,
+                    FourthImage = advertisement.FourthImage,
+                    Price = advertisement.Price,
+                    CategoryName = advertisement.Category.CategoryName,
+                    DateofCreating = advertisement.CreatedAt,
+                    AdvertiserName = advertisement.User.Name,
+                    AdvertiserEmail = advertisement.User.Email,
+                    AdvertiserPhone = advertisement.User.Phone,
+                    Description = advertisement.Description
+                })
+                 .FirstOrDefault(ads => ads.AdvertisementId == id);
+
+            return advertisementFullProperties;
+        }
+
         public async Task<AdvertisementSaveViewModel> GetByIdSaveViewModelAsync(int id)
         {
-            Advertisement advertisement = await _advertisementService.GetByIdAsync(id);
+            Advertisement advertisement = await _advertisementRepository.GetByIdAsync(id);
 
             if (advertisement == null || advertisement.AdvertisementId == 0)
                 return null;
@@ -149,7 +186,9 @@ namespace Emarket.Core.Application.Services
                 SecondImg = advertisement.SecondImage,
                 ThirdImg = advertisement.ThirdImage,
                 FourthImg = advertisement.FourthImage,
-                Price = advertisement.Price
+                Price = advertisement.Price,
+                Description = advertisement.Description
+                
             };
 
 
@@ -159,22 +198,20 @@ namespace Emarket.Core.Application.Services
         {
 
             //From SAVEVM to Model
-            Advertisement advertisement = new Advertisement()
-            {
-                AdvertisementId = vm.AdvertisementId,
-                ProductName = vm.ProductName,
-                CategoryId = vm.CategoryId,
-                UserId = vm.UserId,  //MUST COMING FROM SESSION
-                /// TODO
-                FirstImage = vm.FirstImg,
-                SecondImage = vm.SecondImg,
-                ThirdImage = vm.ThirdImg,
-                FourthImage = vm.FourthImg,
-                Price = vm.Price
-            };
+            Advertisement advertisement = await _advertisementRepository.GetByIdAsync(vm.AdvertisementId);
 
+            advertisement.AdvertisementId = vm.AdvertisementId;
+            advertisement.ProductName = vm.ProductName;
+            advertisement.CategoryId = vm.CategoryId;
+            advertisement.UserId = vm.UserId;
+            advertisement.FirstImage = vm.FirstImg;
+            advertisement.SecondImage = vm.SecondImg;
+            advertisement.ThirdImage = vm.ThirdImg;
+            advertisement.FourthImage = vm.FourthImg;
+            advertisement.Price = vm.Price;
+            advertisement.Description = vm.Description;
 
-            await _advertisementService.UpdateAsync(advertisement);
+            await _advertisementRepository.UpdateAsync(advertisement);
 
         }
 
