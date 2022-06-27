@@ -1,11 +1,14 @@
-﻿@{
+﻿@using Emarket.Core.Application.ViewModels.Ads;
+@using Emarket.Core.Application.ViewModels.Category;
+@model List<AdvertisementViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div id="carouselExampleSlidesOnly" class="carousel slide container-fluid p-0"  data-bs-ride="carousel">
+<div id="carouselExampleSlidesOnly" class="carousel slide container-fluid p-0" data-bs-ride="carousel">
     <div class="carousel-inner" style="height: 70vh">
 
-        <div class="carousel-item active" >
+        <div class="carousel-item active">
             <img src="~/img/background_banner.jpg" class="d-block w-100" alt="...">
         </div>
 
@@ -14,10 +17,123 @@
 
 <div class="container">
 
-    @* Filter *@
     <div class="text-center m-3">
         <h1 class="display-4">Products</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     </div>
+
+    @*Here the filter*@
+    <form class="mt-4 mb-3" method="get" asp-controller="Home" asp-action="Index">
+
+ 
+        <div class="row">
+
+            <div class="card text-center col-12">
+
+                <div class="card-header">
+                    Find what you need...
+                </div>
+
+                <div class="card-body row">
+
+                    <div class="col-6 d-flex justify-content-center align-items-center">
+                        <div class="">
+                            <h5 class="card-title">Search by Product Name:</h5>
+                            <input type="text" class="form-control" name="ProductName" />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <h5 class="card-title">Categories:</h5>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="CategoryId" value="null" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Get All Products.
+                            </label>
+                        </div>
+
+                        @{
+                            foreach (CategoryViewModel category in ViewBag.Categories)
+                            {
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="CategoryId" value="@category.CategoryId" id="@category.CategoryId+@category.CategoryName">
+                                    <label class="form-check-label" for="@category.CategoryId+@category.CategoryName">
+                                        @category.CategoryName
+                                    </label>
+                                </div>
+                            }
+                        }
+
+                    </div>
+
+
+                </div>
+
+                <div class="card-footer text-muted">
+                    <input type="submit" class="btn btn-success text-white" value="Search" />
+                </div>
+
+
+            </div>
+            @*Card END*@
+
+
+        </div>
+
+    </form>
+    @*Here END the filter*@
+
+    @* Products or Advertisements here *@
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            @foreach (AdvertisementViewModel product in Model)
+            {
+
+                    <div class="col-12 col-sm-6 col-md-4 mb-4">
+
+                        <div class="card shadow-sm">
+                            <a asp-controller="Advertisement" asp-action="ProductDetails" asp-route-id="@product.AdvertisementId">
+                                <img class="card-img" src="@(product.SecondImage)" style="width:100%;" height="225" />
+                             </a>
+
+                            <div class="card-body">
+                                <p class="card-text font-weight-bold">@product.ProductName</p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">@product.CategoryName</button>
+                                    </div>
+
+                                    <small> @product.Price </small>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+             }
+
+            @{
+                if (ViewBag.Categories == null)
+                {
+                    <div class="text-center col-12">
+                        <h3 class="text-danger "> There not categories hence product. </h3>
+                        <small class="text-center">Create a Category first and then go to products. </small>
+                    </div>
+                }
+
+                if (Model.Count == 0)
+                {
+                    <div class="text-center col-12">
+                        <h3 class="text-danger "> There not products, <small class="text-center">Create  One. </small> </h3>
+
+                    </div>
+                }
+
+            }
+
+    </div>
+
 
 </div>
