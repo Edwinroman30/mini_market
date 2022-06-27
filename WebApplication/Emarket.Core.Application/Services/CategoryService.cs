@@ -46,8 +46,8 @@ namespace Emarket.Core.Application.Services
 
         public async Task<List<CategoryViewModel>> GetAllViewModelAsync()
         {
-            List<Category> categories = await _categoryRepository.GetAllWithPropertyAsync(new List<string>() { "Advertisement" });
-            //List<User> users = await _userRepository.GetAllAsync();
+            List<Category> categories = await _categoryRepository.GetAllWithPropertyAsync(new List<string>() { "Advertisements" });
+            
 
             return categories.Select(categories => new CategoryViewModel()
             {
@@ -76,12 +76,11 @@ namespace Emarket.Core.Application.Services
         public async Task UpdateAsync(CategorySaveViewModel vm)
         {
 
-            Category category = new Category()
-            {
-                CategoryId = vm.CategoryId,
-                CategoryName = vm.CategoryName,
-                Description = vm.Description
-            };
+            Category category = await _categoryRepository.GetByIdAsync(vm.CategoryId);
+
+            category.CategoryId = vm.CategoryId;
+            category.CategoryName = vm.CategoryName;
+            category.Description = vm.Description;
 
             await _categoryRepository.UpdateAsync(category);
 
