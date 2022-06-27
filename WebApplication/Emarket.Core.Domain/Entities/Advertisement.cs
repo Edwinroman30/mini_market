@@ -17,6 +17,8 @@ namespace Emarket.Core.Domain.Entities
         public string? FourthImage { get; set; }
         public decimal Price { get; set; }
 
+        public string Description { get; set; }
+
         public Category Category { get; set; }
         public int CategoryId { get; set; }
 

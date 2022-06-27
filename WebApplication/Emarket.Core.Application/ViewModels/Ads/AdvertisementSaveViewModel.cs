@@ -15,9 +15,12 @@ namespace Emarket.Core.Application.ViewModels.Ads
         
         [Required(ErrorMessage = "Please, provide a name to reconize the product.")]
         public string ProductName { get; set; }
-        
+
+        [Required(ErrorMessage = "Please, provide a description to know more about it.")]
+        public string Description { get; set; }
+
+        // I dont set this required because I need to work with the views.
         [DataType(DataType.Upload)]
-        [Required(ErrorMessage = "You must at least provide one image to the product")]
         public IFormFile FirstImage { get; set; }
         public IFormFile SecondImage { get; set; }
         public IFormFile ThirdImage { get; set; }

@@ -15,6 +15,7 @@ namespace Emarket.Core.Application.ViewModels.Ads
         public string ThirdImage { get; set; }
         public string FourthImage { get; set; }
         public decimal Price { get; set; }
+        public string Description { get; set; }
 
         public int CategoryId { get; set; }
         public int UserId { get; set; }
