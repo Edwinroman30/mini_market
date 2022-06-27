@@ -50,14 +50,14 @@ namespace e_MiniMarket.Controllers
            
 
             UserViewModel user = await _userService.LoginAsync(userLoginView);
-            user.Password = "";
-
-            //Stablishing the session.
-            HttpContext.Session.Set<UserViewModel>("user_session", user);
-
-
+           
             if (user != null)
             {
+                user.Password = "";
+
+                //Stablishing the session.
+                HttpContext.Session.Set<UserViewModel>("user_session", user);
+
                 //Set to the session
                 return RedirectToRoute(new { controller = "Home", action = "Index" } );
             }
@@ -86,6 +86,15 @@ namespace e_MiniMarket.Controllers
             {
                 return View("Signup", saveViewModel);
             }
+
+            var checkout_name = await _userService.GetAndUserNameValidationAsync(saveViewModel);
+
+            if (checkout_name != null)
+            {
+                ModelState.AddModelError("SignError", "Username already exist. Please provide a new one.");
+                return View("Signup", saveViewModel);
+            }
+
 
             var user = await _userService.AddAsync(saveViewModel);
 
