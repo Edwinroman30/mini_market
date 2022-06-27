@@ -1,0 +1,116 @@
+﻿@using Emarket.Core.Application.ViewModels.Ads;
+@model AdvertisementSaveViewModel
+@{
+    bool editMode = (Model.AdvertisementId != 0 && Model != null) ? true : false;
+
+    ViewData["Title"] = "Main Advertisement" + (editMode == true ? "Edit" : "Create");
+
+}
+
+<div class="container">
+
+    <form class="card" method="post" asp-controller="Advertisement" asp-action="@(editMode==true?"Edit":"Create")" enctype="multipart/form-data">
+
+        <div class="card-header text-center">
+
+            @{
+                if (editMode == true)
+                {
+                    <h4> Editing @Model.ProductName </h4>
+                }
+                else
+                {
+                    <h4> Create a new Adversiment</h4>
+                }
+            }
+
+        </div>
+
+        <div class="card-body container">
+
+            <div class="form-group mb-3">
+                <input type="hidden" asp-for="AdvertisementId" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="ProductName" class="form-label">Product Name:</label>
+                <input asp-for="ProductName" type="text" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+
+            @* Here the UPLOADS *@
+        <div class="row mb-3 d-flex ">
+
+            @{
+                if (editMode)
+                {
+                    <div class="input-group col-3">
+                        <input type="file" class="form-control" asp-for="FirstImage">
+                        <label class="input-group-text" asp-for="FirstImage"> (1)Image </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="input-group col-3">
+                        <input type="file" class="form-control" asp-for="FirstImage" required>
+                        <label class="input-group-text" asp-for="FirstImage"> (1)Image </label>
+                    </div>
+                }
+            }
+
+            <div class="input-group col-3">
+                <input type="file" class="form-control" asp-for="SecondImage">
+                <label class="input-group-text" asp-for="SecondImage"> (2)Image </label>
+            </div>
+
+            <div class="input-group col-3">
+                <input type="file" class="form-control" asp-for="ThirdImage">
+                <label class="input-group-text" asp-for="ThirdImage"> (3)Image </label>
+            </div>
+
+            <div class="input-group col-3">
+                <input type="file" class="form-control" asp-for="FourthImage">
+                <label class="input-group-text" asp-for="FourthImage">(4)Image</label>
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="FirstImage" class="text-danger"></span>
+            </div>
+
+        </div>
+
+
+        <div class="form-group mb-3">
+            <label asp-for="Description" class="form-label">About the product:</label>
+            <input asp-for="Description" type="text" class="form-control" />
+
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="CategoryId" class="form-label">Categories: </label>
+
+                <select asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName"));" asp-for="CategoryId" class="form-select" aria-label="Default select example">
+                    <option value="null">Select a Category</option>
+
+                </select>
+
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Price" class="form-label">Price:</label>
+                <input asp-for="Price" step="any" type="number" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            @* Here end *@
+        </div>
+
+        <div class="card-footer text-center text-muted">
+            <a asp-action="Index" class="btn btn-danger">Cancel</a>
+            <input type="submit" value="Save" class="btn btn-outline-success" />
+        </div>
+    </form>
+
+</div>
