@@ -19,6 +19,6 @@ Generic repository and service must be used.
 ## Overview:
 <hr>
 <center>
-<img src="https://github.com/Edwinroman30/mini_market/blob/main/doc/loginscreen.png" width="90%" heigth="50px">
+<img src="https://github.com/Edwinroman30/mini_market/blob/main/doc/loginscreen.png" width="100%" heigth="50px">
 </center>
 <hr>
