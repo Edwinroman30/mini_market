@@ -1,6 +1,10 @@
 # Mini e-Market
 
-Technical requirements:
+This web application represent a simple CRUD application + user session management. The representation of the app
+is about a electronic market or e-market, where I was focus on the technical requirements and also putting a 
+bit of my styling skills.
+
+### Technical requirements:
 
 - They must use viewmodels and validations must be performed from them.
 - Entity framework must be used with code first for data persistence.
@@ -9,5 +13,12 @@ Technical requirements:
 Generic repository and service must be used.
 
 
-Framework:
+### Framework:
 - `ASP .Net Core MVC 5`
+
+## Overview:
+<hr>
+<center>
+<img src="https://github.com/Edwinroman30/mini_market/blob/main/doc/loginscreen.png" width="90%" heigth="50px">
+</center>
+<hr>
